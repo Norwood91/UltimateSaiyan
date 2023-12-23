@@ -30,6 +30,9 @@ class UltimateSaiyan:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RIGHT:
+                    self.goku_ship.rect.x += 1
 
     def _update_screen(self):
         """Updates images onto the screen, and flips to the new screen"""

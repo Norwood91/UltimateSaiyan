@@ -8,13 +8,15 @@ class Hero:
         self.screen = ui_game.game_screen
         self.screen_rect = ui_game.game_screen.get_rect()
 
-        # Load the ship image and get its rectangle
-        self.goku_image = pygame.image.load('images/goku_ship.png')
+        # Load the ship image, get its rectangle, and resize the image
+        self.goku_image = pygame.image.load('images/goku_ship.bmp')
+        self.goku_image = pygame.transform.scale(self.goku_image, (30, 30))
         self.rect = self.goku_image.get_rect()
 
-        # Start each new ship at the bottom center of the screen
-        self.rect.midbottom = self.screen_rect.midbottom
+        # Start each new ship at the specified coordinates
+        self.rect.x = 600
+        self.rect.y = 740
 
     def blitme(self):
         """Draw the ship at its current position onto the screen"""
-        self.screen.blit(self.goku_image, self.rect)
+        self.screen.blit(self.goku_image, (self.rect.x, self.rect.y))
