@@ -25,11 +25,11 @@ class Hero:
 
     def update_movement(self):
         """Updates the position of the ship based on the movement flag"""
-        if self.moving_right:
+        if self.moving_right and self.rect.right < self.screen_rect.right:
             # Updates the ship's x value instead of the rect's x value
             self.x += self.settings.hero_ship_speed
 
-        if self.moving_left:
+        if self.moving_left and self.rect.left > 0:
             # Updates the ship's x value instead of the rect's x value
             self.x -= self.settings.hero_ship_speed
 
