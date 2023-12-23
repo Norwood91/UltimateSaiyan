@@ -6,6 +6,7 @@ from hero_ship import Hero
 
 class UltimateSaiyan:
     """Class to manage game assets and behavior"""
+
     def __init__(self):
         pygame.init()
         self.settings = Settings()
@@ -21,18 +22,21 @@ class UltimateSaiyan:
         """Starts the main loop of the game"""
         while True:
             self._check_events()
+            self.goku_ship.update_movement()
             self._update_screen()
 
     def _check_events(self):
         """Responds to key presses and mouse events"""
-        # Watch for keyboard and mouse events
         # Returns a list of events that have taken place since the last time the run_game function was called
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RIGHT:
-                    self.goku_ship.rect.x += 1
+                    self.goku_ship.moving_right = True
+            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_RIGHT:
+                    self.goku_ship.moving_right = False
 
     def _update_screen(self):
         """Updates images onto the screen, and flips to the new screen"""
@@ -44,7 +48,7 @@ class UltimateSaiyan:
         # erasing the old screen so only the new one is visible
         pygame.display.flip()
 
+
 if __name__ == '__main__':
-    # Make an instance of the game, and run the game.
     ui = UltimateSaiyan()
     ui.run_game()

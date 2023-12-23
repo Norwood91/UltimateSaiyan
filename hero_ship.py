@@ -17,6 +17,15 @@ class Hero:
         self.rect.x = 600
         self.rect.y = 740
 
+        # Movement Flag(s)
+        self.moving_right = False
+
+    def update_movement(self):
+        """Updates the position of the ship based on the movement flag"""
+        if self.moving_right:
+            self.rect.x += 1
+
+
     def blitme(self):
         """Draw the ship at its current position onto the screen"""
         self.screen.blit(self.goku_image, (self.rect.x, self.rect.y))
