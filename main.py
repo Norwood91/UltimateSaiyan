@@ -1,17 +1,16 @@
 import sys
-
 import pygame
+from settings import Settings
 
 
 class UltimateSaiyan:
     """Class to manage game assets and behavior"""
-
     def __init__(self):
-        """Initialize the game and create game resources"""
         pygame.init()
-
-        self.screen = pygame.display.set_mode((1200, 800))
-        pygame.display.set_caption('Ultimate Saiyan')
+        self.settings = Settings()
+        # Screen Settings
+        self.game_screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
+        pygame.display.set_caption(self.settings.screen_title)
 
     def run_game(self):
         """Starts the main loop of the game"""
@@ -21,6 +20,9 @@ class UltimateSaiyan:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
+
+            # Redraw the screen during each pass of the while loop
+            self.game_screen.fill(self.settings.bg_color)
 
             # Make the most recently drawn screen visible. Draws an empty screen on each pass through the while loop,
             # erasing the old screen so only the new one is visible
