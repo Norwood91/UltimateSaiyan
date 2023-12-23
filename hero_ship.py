@@ -1,4 +1,3 @@
-import pygame
 
 class Hero:
     # Init takes two params, self and a reference to the current instance of the Ultimate Saiyan class
@@ -19,22 +18,32 @@ class Hero:
         # Store a decimal value for the ship's horizontal position
         self.x = float(self.rect.x)
 
+        # Store a decimal value for the ship's vertical position
+        self.y = float(self.rect.y)
+
         # Movement Flag(s)
         self.moving_right = False
         self.moving_left = False
+        self.moving_down = False
+        self.moving_up = False
 
     def update_movement(self):
         """Updates the position of the ship based on the movement flag"""
         if self.moving_right and self.rect.right < self.screen_rect.right:
-            # Updates the ship's x value instead of the rect's x value
             self.x += self.settings.hero_ship_speed
 
         if self.moving_left and self.rect.left > 0:
-            # Updates the ship's x value instead of the rect's x value
             self.x -= self.settings.hero_ship_speed
 
-        # Update the rect object from self.x
+        if self.moving_down and self.rect.bottom <= 773:
+            self.y += self.settings.hero_ship_speed
+
+        if self.moving_up and self.rect.top >= 3:
+            self.y -= self.settings.hero_ship_speed
+
+        # Update the rect object from self.x and self.y
         self.rect.x = self.x
+        self.rect.y = self.y
 
     def blitme(self):
         """Draw the ship at its current position onto the screen"""

@@ -16,4 +16,4 @@ class Settings:
         self.hero_image = pygame.image.load('images/goku_ship.bmp')
         self.scaled_hero_image = pygame.transform.scale(self.hero_image, (30, 30))
         self.starting_heroes_x_position = 600
-        self.starting_hereos_y_position = 740
+        self.starting_hereos_y_position = 0

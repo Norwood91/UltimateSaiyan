@@ -35,12 +35,20 @@ class UltimateSaiyan:
                     self.main_character_ship.moving_right = True
                 elif event.key == pygame.K_LEFT:
                     self.main_character_ship.moving_left = True
+                elif event.key == pygame.K_DOWN:
+                    self.main_character_ship.moving_down = True
+                elif event.key == pygame.K_UP:
+                    self.main_character_ship.moving_up = True
 
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_RIGHT:
                     self.main_character_ship.moving_right = False
                 elif event.key == pygame.K_LEFT:
                     self.main_character_ship.moving_left = False
+                elif event.key == pygame.K_DOWN:
+                    self.main_character_ship.moving_down = False
+                elif event.key == pygame.K_UP:
+                    self.main_character_ship.moving_up = False
 
 
     def _update_screen(self):
