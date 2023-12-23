@@ -20,21 +20,26 @@ class UltimateSaiyan:
     def run_game(self):
         """Starts the main loop of the game"""
         while True:
-            # Watch for keyboard and mouse events
-            # Returns a list of events that have taken place since the last time the run_game function was called
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    sys.exit()
+            self._check_events()
+            self._update_screen()
 
-            # Redraw the screen during each pass of the while loop
-            self.game_screen.fill(self.settings.bg_color)
-            # Draw the hero ship to the screen, on top of the background
-            self.goku_ship.blitme()
+    def _check_events(self):
+        """Responds to key presses and mouse events"""
+        # Watch for keyboard and mouse events
+        # Returns a list of events that have taken place since the last time the run_game function was called
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
 
-            # Make the most recently drawn screen visible. Draws an empty screen on each pass through the while loop,
-            # erasing the old screen so only the new one is visible
-            pygame.display.flip()
-
+    def _update_screen(self):
+        """Updates images onto the screen, and flips to the new screen"""
+        # Redraw the screen during each pass of the while loop
+        self.game_screen.fill(self.settings.bg_color)
+        # Draw the hero ship to the screen, on top of the background
+        self.goku_ship.blitme()
+        # Make the most recently drawn screen visible. Draws an empty screen on each pass through the while loop,
+        # erasing the old screen so only the new one is visible
+        pygame.display.flip()
 
 if __name__ == '__main__':
     # Make an instance of the game, and run the game.
