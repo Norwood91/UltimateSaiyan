@@ -12,7 +12,7 @@ class Settings:
         self.screen_title = "Ultimate Saiyan"
 
         # Hero Ship Settings
-        self.hero_ship_speed = 2
+        self.hero_ship_speed = 1.5
         self.hero_image = pygame.image.load('images/goku_ship.bmp')
         self.scaled_hero_image = pygame.transform.scale(self.hero_image, (30, 30))
         self.starting_heroes_x_position = 600

@@ -44,6 +44,8 @@ class UltimateSaiyan:
             self.main_character_ship.moving_down = True
         elif event.key == pygame.K_UP:
             self.main_character_ship.moving_up = True
+        elif event.key == pygame.K_q:
+            sys.exit()
 
     def _check_keyup_events(self, event):
         if event.key == pygame.K_RIGHT:
