@@ -35,7 +35,7 @@ class Hero:
         if self.moving_left and self.rect.left > 0:
             self.x -= self.settings.hero_ship_speed
 
-        if self.moving_down and self.rect.bottom <= 773:
+        if self.moving_down and self.rect.bottom <= 748:
             self.y += self.settings.hero_ship_speed
 
         if self.moving_up and self.rect.top >= 3:

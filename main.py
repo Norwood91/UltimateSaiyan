@@ -59,8 +59,7 @@ class UltimateSaiyan:
 
     def _update_screen(self):
         """Updates images onto the screen, and flips to the new screen"""
-        # Redraw the screen during each pass of the while loop
-        self.game_screen.fill(self.settings.bg_color)
+        self.game_screen.blit(self.settings.bg_image, (0, 0))
         # Draw the hero ship to the screen, on top of the background
         self.main_character_ship.blitme()
         # Make the most recently drawn screen visible. Draws an empty screen on each pass through the while loop,
