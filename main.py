@@ -7,6 +7,7 @@ from energy_blast import EnergyBlast
 
 class UltimateSaiyan:
     """Class to manage game assets and behavior"""
+
     def __init__(self):
         pygame.init()
         self.settings = Settings()
@@ -26,7 +27,7 @@ class UltimateSaiyan:
         while True:
             self._check_events()
             self.main_character_ship.update_movement()
-            self.energy_blasts.update()
+            self._update_blasts()
             self._update_screen()
 
     def _check_events(self):
@@ -65,21 +66,27 @@ class UltimateSaiyan:
             self.main_character_ship.moving_up = False
 
     def _fire_blast(self):
-        # Create a new blast and add it to the blasts group
-        new_blast = EnergyBlast(self)
-        self.energy_blasts.add(new_blast)
+        if len(self.energy_blasts) < self.settings.blasts_allowed:
+            # Create a new blast and add it to the blasts group
+            new_blast = EnergyBlast(self)
+            self.energy_blasts.add(new_blast)
+
+    def _display_blast(self):
+        for blast in self.energy_blasts.sprites():
+            blast.blitme()
+
+    def _update_blasts(self):
+        self.energy_blasts.update()
+        for blast in self.energy_blasts.copy():
+            if blast.rect.bottom <= 0:
+                self.energy_blasts.remove(blast)
 
 
     def _update_screen(self):
         """Updates images onto the screen, and flips to the new screen"""
         self.game_screen.blit(self.settings.bg_image, (0, 0))
-
-        # Draw the hero ship to the screen, on top of the background
         self.main_character_ship.blitme()
-        for blast in self.energy_blasts.sprites():
-            blast.blitme()
-        # Make the most recently drawn screen visible. Draws an empty screen on each pass through the while loop,
-        # erasing the old screen so only the new one is visible
+        self._display_blast()
         pygame.display.flip()
 
 

@@ -1,6 +1,5 @@
 import pygame
 
-
 class Settings:
     def __init__(self):
         """Initialize the game's settings"""
@@ -18,5 +17,6 @@ class Settings:
 
         # Ki-Blast Settings
         self.blast_speed = 1
+        self.blasts_allowed = 3
         self.blast_image = pygame.image.load('images/energy_blast.png')
         self.blast_image_scaled = pygame.transform.scale(self.blast_image, (20, 20))
