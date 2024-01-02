@@ -10,10 +10,7 @@ class Hero:
         # Load the ship image and get its rectangle
         self.hero_ship_image = ui_game.settings.scaled_hero_image
         self.rect = self.hero_ship_image.get_rect()
-
-        # Start each new ship at the specified coordinates
-        self.rect.x = self.settings.starting_heroes_x_position
-        self.rect.y = self.settings.starting_hereos_y_position
+        self.rect.midbottom = self.screen_rect.midbottom
 
         # Store a decimal value for the ship's horizontal position
         self.x = float(self.rect.x)
@@ -39,7 +36,7 @@ class Hero:
             self.y += self.settings.hero_ship_speed
 
         if self.moving_up and self.rect.top >= 3:
-            self.y -= self.settings.hero_ship_speed
+                self.y -= self.settings.hero_ship_speed
 
         # Update the rect object from self.x and self.y
         self.rect.x = self.x
@@ -47,4 +44,4 @@ class Hero:
 
     def blitme(self):
         """Draw the ship at its current position onto the screen"""
-        self.screen.blit(self.hero_ship_image, (self.rect.x, self.rect.y))
+        self.screen.blit(self.hero_ship_image, self.rect)
