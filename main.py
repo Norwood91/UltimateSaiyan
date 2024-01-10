@@ -3,6 +3,7 @@ import pygame
 from settings import Settings
 from hero_ship import Hero
 from energy_blast import EnergyBlast
+from frieza_force import EnemyShip
 
 
 class UltimateSaiyan:
@@ -21,6 +22,10 @@ class UltimateSaiyan:
 
         # Energy Blast(s)
         self.energy_blasts = pygame.sprite.Group()
+
+        # Enemy Ships
+        self.frieza_force = pygame.sprite.Group()
+        self._create_fleet()
 
     def run_game(self):
         """Starts the main loop of the game"""
@@ -81,11 +86,31 @@ class UltimateSaiyan:
             if blast.rect.bottom <= 0:
                 self.energy_blasts.remove(blast)
 
+    def _create_fleet(self):
+        enemy_ship = EnemyShip(self)
+        enemy_ship_width = enemy_ship.rect.width
+        horizontal_screen_space = self.settings.screen_width - (2 * enemy_ship_width)
+        num_enemies_in_horizontal_row = horizontal_screen_space // (2 * enemy_ship_width)
+
+        # Create the first row of enemy ships
+        for ship_number in range(num_enemies_in_horizontal_row):
+            # Instantiate a new instance of the Enemies class
+            enemy = EnemyShip(self)
+            # Get the x-coordinate for the ship
+            enemy.x = enemy_ship_width + (2 * enemy_ship_width) * ship_number
+
+            #print(f'Ship number: {ship_number} has an x-coord of: {enemy.x}')
+
+            # Start the next enemy 80 pixels to the right of the previous ship
+            enemy.rect.x = enemy.x
+            # Add the enemy to the frieza force group
+            self.frieza_force.add(enemy)
 
     def _update_screen(self):
         """Updates images onto the screen, and flips to the new screen"""
         self.game_screen.blit(self.settings.bg_image, (0, 0))
         self.main_character_ship.blitme()
+        self.frieza_force.draw(self.game_screen)
         self._display_blast()
         pygame.display.flip()
 

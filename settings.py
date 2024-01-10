@@ -13,7 +13,11 @@ class Settings:
         # Hero Ship Settings
         self.hero_ship_speed = 1.5
         self.hero_image = pygame.image.load('images/goku_ship.bmp')
-        self.scaled_hero_image = pygame.transform.scale(self.hero_image, (40, 40))
+        self.scaled_hero_image = pygame.transform.scale(self.hero_image, (30, 30))
+
+        # Enemy Ship Settings
+        self.enemy_ship = pygame.image.load('images/enemy_ship.png')
+        self.enemy_ship_scaled = pygame.transform.scale(self.enemy_ship, (40, 40))
 
         # Ki-Blast Settings
         self.blast_speed = 1
