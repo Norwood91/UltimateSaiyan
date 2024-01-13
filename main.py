@@ -13,17 +13,13 @@ class UltimateSaiyan:
         pygame.init()
         self.settings = Settings()
 
-        # Main Game Screen
         self.game_screen = self.settings.main_screen
         pygame.display.set_caption(self.settings.screen_title)
 
-        # Main Character Ship
         self.main_character_ship = Hero(self)
 
-        # Energy Blast(s)
         self.energy_blasts = pygame.sprite.Group()
 
-        # Enemy Ships
         self.frieza_force = pygame.sprite.Group()
         self._create_fleet()
 
@@ -72,7 +68,6 @@ class UltimateSaiyan:
 
     def _fire_blast(self):
         if len(self.energy_blasts) < self.settings.blasts_allowed:
-            # Create a new blast and add it to the blasts group
             new_blast = EnergyBlast(self)
             self.energy_blasts.add(new_blast)
 
@@ -88,23 +83,27 @@ class UltimateSaiyan:
 
     def _create_fleet(self):
         enemy_ship = EnemyShip(self)
-        enemy_ship_width = enemy_ship.rect.width
-        horizontal_screen_space = self.settings.screen_width - (2 * enemy_ship_width)
-        num_enemies_in_horizontal_row = horizontal_screen_space // (2 * enemy_ship_width)
+        enemy_width, enemy_height = enemy_ship.rect.size
+        horizontal_screen_space = self.settings.screen_width - (2 * enemy_width)
+        num_enemies_in_horizontal_row = horizontal_screen_space // (2 * enemy_width)
 
-        # Create the first row of enemy ships
-        for ship_number in range(num_enemies_in_horizontal_row):
-            # Instantiate a new instance of the Enemies class
-            enemy = EnemyShip(self)
-            # Get the x-coordinate for the ship
-            enemy.x = enemy_ship_width + (2 * enemy_ship_width) * ship_number
+        hero_ship_height = self.main_character_ship.rect.height
+        vertical_screen_space = (self.settings.screen_height - (3 * enemy_height) - hero_ship_height)
+        num_of_vert_rows = vertical_screen_space // (2 * enemy_height)
 
-            #print(f'Ship number: {ship_number} has an x-coord of: {enemy.x}')
+        # Create the fleet of enemy ships
+        for row_number in range(num_of_vert_rows):
+            for ship_number in range(num_enemies_in_horizontal_row):
+                self._create_alien(ship_number, row_number)
 
-            # Start the next enemy 80 pixels to the right of the previous ship
-            enemy.rect.x = enemy.x
-            # Add the enemy to the frieza force group
-            self.frieza_force.add(enemy)
+    def _create_alien(self, ship_number, row_number):
+        """Create alien and place it in the row"""
+        enemy = EnemyShip(self)
+        enemy_width, enemy_height = enemy.rect.size
+        enemy.x = enemy_width + (2 * enemy_width) * ship_number
+        enemy.rect.x = enemy.x
+        enemy.rect.y = enemy_height + (1.25 * enemy.rect.height) * row_number
+        self.frieza_force.add(enemy)
 
     def _update_screen(self):
         """Updates images onto the screen, and flips to the new screen"""
