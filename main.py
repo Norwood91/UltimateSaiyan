@@ -6,6 +6,7 @@ from hero_ship import Hero
 from energy_blast import EnergyBlast
 from frieza_force import EnemyShip
 from game_stats import GameStats
+from start_button import StartButton
 
 
 class UltimateSaiyan:
@@ -21,6 +22,7 @@ class UltimateSaiyan:
         self.energy_blasts = pygame.sprite.Group()
         self.f_force = pygame.sprite.Group()
         self._create_fleet()
+        self.start_button = StartButton(self)
 
     def run_game(self):
         """Starts the main loop of the game"""
@@ -42,6 +44,20 @@ class UltimateSaiyan:
                 self._check_keydown_events(event)
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                self._check_start_button(mouse_pos)
+
+    def _check_start_button(self, mouse_pos):
+        start_button_clicked = self.start_button.rect.collidepoint(mouse_pos)
+        if start_button_clicked and not self.stats.game_active:
+            self.stats.reset_stats()
+            self.stats.game_active = True
+            self.f_force.empty()
+            self.energy_blasts.empty()
+            self._create_fleet()
+            self.main_character_ship.center_ship()
+            pygame.mouse.set_visible(False)
 
     def _check_keydown_events(self, event):
         if event.key == pygame.K_RIGHT:
@@ -118,6 +134,7 @@ class UltimateSaiyan:
             sleep(1)
         else:
             self.stats.game_active = False
+            pygame.mouse.set_visible(True)
 
     def _create_fleet(self):
         enemy_ship = EnemyShip(self)
@@ -157,9 +174,13 @@ class UltimateSaiyan:
     def _update_screen(self):
         """Updates images onto the screen, and flips to the new screen"""
         self.game_screen.blit(self.settings.bg_image, (0, 0))
-        self.main_character_ship.blitme()
-        self.f_force.draw(self.game_screen)
-        self._display_blast()
+        if not self.stats.game_active:
+            self.start_button.blitme()
+        else:
+            self.main_character_ship.blitme()
+            self.f_force.draw(self.game_screen)
+            self._display_blast()
+
         pygame.display.flip()
 
 

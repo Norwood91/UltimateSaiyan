@@ -11,9 +11,13 @@ class Settings:
         self.bg_image = pygame.image.load('images/background_image.webp')
         self.screen_title = "Ultimate Saiyan"
 
+        # Start Button Settings
+        self.button_image = pygame.image.load("images/start_button.png")
+        self.button_image_scaled = pygame.transform.scale(self.button_image, (200, 200))
+
         # Hero Ship Settings
         self.hero_ship_speed = 1.5
-        self.hero_ship_limit = 3
+        self.hero_ship_limit = 0
         self.hero_image = pygame.image.load('images/goku_ship.bmp')
         self.scaled_hero_image = pygame.transform.scale(self.hero_image, (30, 30))
 
