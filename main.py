@@ -1,9 +1,11 @@
 import sys
+from time import sleep
 import pygame
 from settings import Settings
 from hero_ship import Hero
 from energy_blast import EnergyBlast
 from frieza_force import EnemyShip
+from game_stats import GameStats
 
 
 class UltimateSaiyan:
@@ -12,14 +14,11 @@ class UltimateSaiyan:
     def __init__(self):
         pygame.init()
         self.settings = Settings()
-
         self.game_screen = self.settings.main_screen
         pygame.display.set_caption(self.settings.screen_title)
-
+        self.stats = GameStats(self)
         self.main_character_ship = Hero(self)
-
         self.energy_blasts = pygame.sprite.Group()
-
         self.f_force = pygame.sprite.Group()
         self._create_fleet()
 
@@ -27,9 +26,10 @@ class UltimateSaiyan:
         """Starts the main loop of the game"""
         while True:
             self._check_events()
-            self.main_character_ship.update_movement()
-            self._update_blasts()
-            self._update_enemy_ships()
+            if self.stats.game_active:
+                self.main_character_ship.update_movement()
+                self._update_blasts()
+                self._update_enemy_ships()
             self._update_screen()
 
     def _check_events(self):
@@ -89,9 +89,35 @@ class UltimateSaiyan:
             self.energy_blasts.empty()
             self._create_fleet()
 
+    def _check_enemies_hit_bottom(self):
+        """Check if any enemy ships have reached the bottom of screen"""
+        screen_rect = self.game_screen.get_rect()
+        for enemy in self.f_force.sprites():
+            if enemy.rect.bottom >= screen_rect.bottom:
+                self._hero_ship_hit()
+                break
+
     def _update_enemy_ships(self):
         self._check_fleet_edges()
         self.f_force.update()
+
+        if pygame.sprite.spritecollideany(self.main_character_ship, self.f_force):
+            self._hero_ship_hit()
+
+        self._check_enemies_hit_bottom()
+
+    def _hero_ship_hit(self):
+        """Responds to the hero ship being hit by an alien"""
+        if self.stats.hero_ships_left > 0:
+            self.stats.hero_ships_left -= 1
+            self.f_force.empty()
+            self.energy_blasts.empty()
+
+            self._create_fleet()
+            self.main_character_ship.center_ship()
+            sleep(1)
+        else:
+            self.stats.game_active = False
 
     def _create_fleet(self):
         enemy_ship = EnemyShip(self)

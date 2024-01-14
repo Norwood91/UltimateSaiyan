@@ -1,6 +1,5 @@
 
 class Hero:
-    # Init takes two params, self and a reference to the current instance of the Ultimate Saiyan class
     def __init__(self, ui_game):
         """Initialize the hero ship and it's starting position"""
         self.screen = ui_game.game_screen
@@ -41,6 +40,11 @@ class Hero:
         # Update the rect object from self.x and self.y
         self.rect.x = self.x
         self.rect.y = self.y
+
+    def center_ship(self):
+        """Centers the hero ship on the screen"""
+        self.x = 650
+        self.y = 720
 
     def blitme(self):
         """Draw the ship at its current position onto the screen"""
