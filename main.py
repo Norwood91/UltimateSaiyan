@@ -20,7 +20,7 @@ class UltimateSaiyan:
 
         self.energy_blasts = pygame.sprite.Group()
 
-        self.frieza_force = pygame.sprite.Group()
+        self.f_force = pygame.sprite.Group()
         self._create_fleet()
 
     def run_game(self):
@@ -29,6 +29,7 @@ class UltimateSaiyan:
             self._check_events()
             self.main_character_ship.update_movement()
             self._update_blasts()
+            self._update_enemy_ships()
             self._update_screen()
 
     def _check_events(self):
@@ -81,6 +82,10 @@ class UltimateSaiyan:
             if blast.rect.bottom <= 0:
                 self.energy_blasts.remove(blast)
 
+    def _update_enemy_ships(self):
+        self._check_fleet_edges()
+        self.f_force.update()
+
     def _create_fleet(self):
         enemy_ship = EnemyShip(self)
         enemy_width, enemy_height = enemy_ship.rect.size
@@ -94,22 +99,33 @@ class UltimateSaiyan:
         # Create the fleet of enemy ships
         for row_number in range(num_of_vert_rows):
             for ship_number in range(num_enemies_in_horizontal_row):
-                self._create_alien(ship_number, row_number)
+                self._create_enemy(ship_number, row_number)
 
-    def _create_alien(self, ship_number, row_number):
+    def _create_enemy(self, ship_number, row_number):
         """Create alien and place it in the row"""
         enemy = EnemyShip(self)
         enemy_width, enemy_height = enemy.rect.size
         enemy.x = enemy_width + (2 * enemy_width) * ship_number
         enemy.rect.x = enemy.x
         enemy.rect.y = enemy_height + (1.25 * enemy.rect.height) * row_number
-        self.frieza_force.add(enemy)
+        self.f_force.add(enemy)
+
+    def _check_fleet_edges(self):
+        for enemy in self.f_force.sprites():
+            if enemy.check_edges():
+                self._change_fleet_direction()
+                break
+
+    def _change_fleet_direction(self):
+        for enemy in self.f_force.sprites():
+            enemy.rect.y += self.settings.fleet_drop_speed
+        self.settings.fleet_direction *= -1
 
     def _update_screen(self):
         """Updates images onto the screen, and flips to the new screen"""
         self.game_screen.blit(self.settings.bg_image, (0, 0))
         self.main_character_ship.blitme()
-        self.frieza_force.draw(self.game_screen)
+        self.f_force.draw(self.game_screen)
         self._display_blast()
         pygame.display.flip()
 

@@ -18,6 +18,10 @@ class Settings:
         # Enemy Ship Settings
         self.enemy_ship = pygame.image.load('images/enemy_ship.png')
         self.enemy_ship_scaled = pygame.transform.scale(self.enemy_ship, (40, 40))
+        self.enemy_ship_speed = 1
+        self.fleet_drop_speed = 10
+        self.fleet_direction = 1
+
 
         # Ki-Blast Settings
         self.blast_speed = 1
