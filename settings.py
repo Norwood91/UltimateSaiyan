@@ -1,5 +1,6 @@
 import pygame
 
+
 class Settings:
     def __init__(self):
         """Initialize the game's settings"""
@@ -22,9 +23,8 @@ class Settings:
         self.fleet_drop_speed = 10
         self.fleet_direction = 1
 
-
         # Ki-Blast Settings
-        self.blast_speed = 1
+        self.blast_speed = 1.5
         self.blasts_allowed = 3
         self.blast_image = pygame.image.load('images/energy_blast.png')
         self.blast_image_scaled = pygame.transform.scale(self.blast_image, (20, 20))

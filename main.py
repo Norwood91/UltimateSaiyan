@@ -81,6 +81,13 @@ class UltimateSaiyan:
         for blast in self.energy_blasts.copy():
             if blast.rect.bottom <= 0:
                 self.energy_blasts.remove(blast)
+        self._check_blast_enemy_collision()
+
+    def _check_blast_enemy_collision(self):
+        collisions = pygame.sprite.groupcollide(self.energy_blasts, self.f_force, True, True)
+        if not self.f_force:
+            self.energy_blasts.empty()
+            self._create_fleet()
 
     def _update_enemy_ships(self):
         self._check_fleet_edges()
