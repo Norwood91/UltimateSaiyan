@@ -7,6 +7,7 @@ from energy_blast import EnergyBlast
 from frieza_force import EnemyShip
 from game_stats import GameStats
 from start_button import StartButton
+from scoreboard import Scoreboard
 
 
 class UltimateSaiyan:
@@ -18,6 +19,7 @@ class UltimateSaiyan:
         self.game_screen = self.settings.main_screen
         pygame.display.set_caption(self.settings.screen_title)
         self.stats = GameStats(self)
+        self.scoreboard = Scoreboard(self)
         self.main_character_ship = Hero(self)
         self.energy_blasts = pygame.sprite.Group()
         self.f_force = pygame.sprite.Group()
@@ -54,11 +56,14 @@ class UltimateSaiyan:
             self.settings.initialize_dynamic_settings()
             self.stats.reset_stats()
             self.stats.game_active = True
+            self.scoreboard.prep_score()
+            self.scoreboard.prep_game_level()
             self.f_force.empty()
             self.energy_blasts.empty()
             self._create_fleet()
             self.main_character_ship.center_ship()
             pygame.mouse.set_visible(False)
+
 
     def _check_keydown_events(self, event):
         if event.key == pygame.K_RIGHT:
@@ -101,11 +106,20 @@ class UltimateSaiyan:
         self._check_blast_enemy_collision()
 
     def _check_blast_enemy_collision(self):
-        collisions = pygame.sprite.groupcollide(self.energy_blasts, self.f_force, True, True)
+        collisions = pygame.sprite.groupcollide(self.energy_blasts, self.f_force, False, True)
+        if collisions:
+            for enemies in collisions.values():
+                self.stats.score += self.settings.enemy_shot_points * len(enemies)
+                self.scoreboard.prep_score()
+                self.scoreboard.check_high_score()
+
         if not self.f_force:
             self.energy_blasts.empty()
             self._create_fleet()
             self.settings.increase_speed()
+            self.stats.game_level += 1
+            self.scoreboard.prep_game_level()
+            self.scoreboard.check_high_level()
 
     def _check_enemies_hit_bottom(self):
         """Check if any enemy ships have reached the bottom of screen"""
@@ -179,6 +193,7 @@ class UltimateSaiyan:
         if not self.stats.game_active:
             self.start_button.blitme()
         else:
+            self.scoreboard.show_score()
             self.main_character_ship.blitme()
             self.f_force.draw(self.game_screen)
             self._display_blast()

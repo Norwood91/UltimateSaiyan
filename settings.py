@@ -13,6 +13,7 @@ class Settings:
 
         # Game Settings
         self.speedup_scale = 1.2
+        self.score_scale = 1.5
         self.initialize_dynamic_settings()
 
         # Start Button Settings
@@ -33,17 +34,19 @@ class Settings:
         # Ki-Blast Settings
         self.blasts_allowed = 3
         self.blast_image = pygame.image.load('images/energy_blast.png')
-        self.blast_image_scaled = pygame.transform.scale(self.blast_image, (20, 20))
+        self.blast_image_scaled = pygame.transform.scale(self.blast_image, (200, 200))
 
     def initialize_dynamic_settings(self):
         """Initialize settings that change throughout the game"""
         self.hero_ship_speed = 1.5
-        self.blast_speed = 1.5
+        self.blast_speed = 5
         self.enemy_ship_speed = 1
         self.fleet_direction = 1
+        self.enemy_shot_points = 50
 
     def increase_speed(self):
-        """Increase the speed settings"""
+        """Increase the speed and point settings"""
         self.hero_ship_speed *= self.speedup_scale
         self.blast_speed *= self.speedup_scale
         self.enemy_ship_speed *= self.speedup_scale
+        self.enemy_shot_points = int(self.enemy_shot_points * self.score_scale)
