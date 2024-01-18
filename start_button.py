@@ -9,7 +9,8 @@ class StartButton:
         self.button = self.settings.button_image_scaled
         self.rect = self.button.get_rect()
 
-        self.rect.center = self.screen_rect.center
+        self.rect.centerx = self.screen_rect.centerx
+        self.rect.y = 341
 
     def blitme(self):
         self.screen.blit(self.button, self.rect)

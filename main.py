@@ -8,6 +8,7 @@ from frieza_force import EnemyShip
 from game_stats import GameStats
 from start_button import StartButton
 from scoreboard import Scoreboard
+from title_screen import TitleScreen
 
 
 class UltimateSaiyan:
@@ -20,11 +21,14 @@ class UltimateSaiyan:
         pygame.display.set_caption(self.settings.screen_title)
         self.stats = GameStats(self)
         self.scoreboard = Scoreboard(self)
+        self.title = TitleScreen(self)
+        self.start_button = StartButton(self)
         self.main_character_ship = Hero(self)
         self.energy_blasts = pygame.sprite.Group()
         self.f_force = pygame.sprite.Group()
         self._create_fleet()
-        self.start_button = StartButton(self)
+        self.high_score_file = self.stats.high_score_file
+        self.high_level_file = self.stats.high_level_file
 
     def run_game(self):
         """Starts the main loop of the game"""
@@ -58,12 +62,12 @@ class UltimateSaiyan:
             self.stats.game_active = True
             self.scoreboard.prep_score()
             self.scoreboard.prep_game_level()
+            self.scoreboard.prep_hero_ships()
             self.f_force.empty()
             self.energy_blasts.empty()
             self._create_fleet()
             self.main_character_ship.center_ship()
             pygame.mouse.set_visible(False)
-
 
     def _check_keydown_events(self, event):
         if event.key == pygame.K_RIGHT:
@@ -77,6 +81,10 @@ class UltimateSaiyan:
         elif event.key == pygame.K_SPACE:
             self._fire_blast()
         elif event.key == pygame.K_q:
+            with open(self.high_score_file, 'w') as file:
+                file.write(str(self.stats.high_score))
+            with open(self.high_level_file, 'w') as file:
+                file.write(str(self.stats.high_level))
             sys.exit()
 
     def _check_keyup_events(self, event):
@@ -106,7 +114,7 @@ class UltimateSaiyan:
         self._check_blast_enemy_collision()
 
     def _check_blast_enemy_collision(self):
-        collisions = pygame.sprite.groupcollide(self.energy_blasts, self.f_force, False, True)
+        collisions = pygame.sprite.groupcollide(self.energy_blasts, self.f_force, True, True)
         if collisions:
             for enemies in collisions.values():
                 self.stats.score += self.settings.enemy_shot_points * len(enemies)
@@ -118,8 +126,8 @@ class UltimateSaiyan:
             self._create_fleet()
             self.settings.increase_speed()
             self.stats.game_level += 1
-            self.scoreboard.prep_game_level()
             self.scoreboard.check_high_level()
+            self.scoreboard.prep_game_level()
 
     def _check_enemies_hit_bottom(self):
         """Check if any enemy ships have reached the bottom of screen"""
@@ -142,6 +150,7 @@ class UltimateSaiyan:
         """Responds to the hero ship being hit by an alien"""
         if self.stats.hero_ships_left > 0:
             self.stats.hero_ships_left -= 1
+            self.scoreboard.prep_hero_ships()
             self.f_force.empty()
             self.energy_blasts.empty()
 
@@ -150,6 +159,10 @@ class UltimateSaiyan:
             sleep(1)
         else:
             self.stats.game_active = False
+            with open(self.high_score_file, 'w') as file:
+                file.write(str(self.stats.high_score))
+            with open(self.high_level_file, 'w') as file:
+                file.write(str(self.stats.high_level))
             pygame.mouse.set_visible(True)
 
     def _create_fleet(self):
@@ -192,6 +205,7 @@ class UltimateSaiyan:
         self.game_screen.blit(self.settings.bg_image, (0, 0))
         if not self.stats.game_active:
             self.start_button.blitme()
+            self.title.show_title()
         else:
             self.scoreboard.show_score()
             self.main_character_ship.blitme()

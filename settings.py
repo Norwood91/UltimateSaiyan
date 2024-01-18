@@ -18,10 +18,10 @@ class Settings:
 
         # Start Button Settings
         self.button_image = pygame.image.load("images/start_button.png")
-        self.button_image_scaled = pygame.transform.scale(self.button_image, (200, 200))
+        self.button_image_scaled = pygame.transform.scale(self.button_image, (300, 300))
 
         # Hero Ship Settings
-        self.hero_ship_limit = 0
+        self.hero_ship_limit = 3
         self.hero_image = pygame.image.load('images/goku_ship.bmp')
         self.scaled_hero_image = pygame.transform.scale(self.hero_image, (30, 30))
 
@@ -34,12 +34,12 @@ class Settings:
         # Ki-Blast Settings
         self.blasts_allowed = 3
         self.blast_image = pygame.image.load('images/energy_blast.png')
-        self.blast_image_scaled = pygame.transform.scale(self.blast_image, (200, 200))
+        self.blast_image_scaled = pygame.transform.scale(self.blast_image, (20, 20))
 
     def initialize_dynamic_settings(self):
         """Initialize settings that change throughout the game"""
         self.hero_ship_speed = 1.5
-        self.blast_speed = 5
+        self.blast_speed = 2
         self.enemy_ship_speed = 1
         self.fleet_direction = 1
         self.enemy_shot_points = 50

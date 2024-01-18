@@ -1,7 +1,11 @@
 import pygame.font
+from pygame.sprite import Group
+from hero_ship import Hero
+
 class Scoreboard:
     """A class to report scoring information"""
     def __init__(self, ui_game):
+        self.ui_game = ui_game
         self.screen = ui_game.game_screen
         self.screen_rect = self.screen.get_rect()
         self.settings = ui_game.settings
@@ -13,6 +17,7 @@ class Scoreboard:
         self.prep_high_score()
         self.prep_game_level()
         self.prep_high_level()
+        self.prep_hero_ships()
 
     def prep_score(self):
         """turn the score into a rendered image"""
@@ -46,12 +51,22 @@ class Scoreboard:
     def prep_high_level(self):
         """Turn the high score into a rendered image"""
         high_level = self.stats.high_level
-        high_level_str = f"High Level: {high_level}"
+        high_level_str = "High Level: {:}".format(high_level)
         self.high_level_image = self.font.render(high_level_str, True, self.text_color)
 
         self.high_level_rect = self.high_level_image.get_rect()
         self.high_level_rect.right = self.screen_rect.right - 20
         self.high_level_rect.top = self.high_score_rect.bottom + 10
+
+    def prep_hero_ships(self):
+        """Show user how many ships(lives) they have left"""
+        self.ships = Group()
+        for ship_number in range(self.stats.hero_ships_left):
+            ship = Hero(self.ui_game)
+            ship.rect.x = 10 + ship_number * ship.rect.width
+            ship.rect.y = 10
+            self.ships.add(ship)
+
 
     def check_high_score(self):
         """Check to see if there's a new high score"""
@@ -66,8 +81,10 @@ class Scoreboard:
             self.prep_high_level()
 
     def show_score(self):
-        """Draws the scores and the level to the screen"""
+        """Draws the scores, level and the lives left to the screen"""
         self.screen.blit(self.score_image, self.score_rect)
         self.screen.blit(self.high_score_image, self.high_score_rect)
         self.screen.blit(self.level_image, self.level_rect)
         self.screen.blit(self.high_level_image, self.high_level_rect)
+        self.ships.draw(self.screen)
+

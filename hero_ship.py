@@ -1,14 +1,15 @@
-
-class Hero:
+from pygame.sprite import Sprite
+class Hero(Sprite):
     def __init__(self, ui_game):
+        super().__init__()
         """Initialize the hero ship and it's starting position"""
         self.screen = ui_game.game_screen
         self.screen_rect = ui_game.game_screen.get_rect()
         self.settings = ui_game.settings
 
         # Load the ship image and get its rectangle
-        self.hero_ship_image = ui_game.settings.scaled_hero_image
-        self.rect = self.hero_ship_image.get_rect()
+        self.image = ui_game.settings.scaled_hero_image
+        self.rect = self.image.get_rect()
         self.rect.midbottom = self.screen_rect.midbottom
 
         # Store a decimal value for the ship's horizontal position
@@ -48,4 +49,4 @@ class Hero:
 
     def blitme(self):
         """Draw the ship at its current position onto the screen"""
-        self.screen.blit(self.hero_ship_image, self.rect)
+        self.screen.blit(self.image, self.rect)
